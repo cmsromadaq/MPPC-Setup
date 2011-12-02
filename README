@@ -1,0 +1,53 @@
+COMPILE:
+In order to compile, the library var must be setted first:
+	
+	LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/public/lib
+
+After thati, just wite:
+
+	make
+
+Maybe you may need to delete the file:
+
+	src/maindir.mk
+
+It will be created by the makefile with goods parameters.
+The binary file will be created on bin folder. 
+
+
+CONTENT:
+Some library are included but not used yet, because the 
+entire project is still under development.
+
+In src folder there is possible to find:
+ - CAENVMEenvironment: Thanks to Pedro Toledo. This take
+	the library from CAEN: CAENVMELib and transform it
+	to a class.
+ - core: thanks to Pedro Toledo and Alam Toro.
+	Is where the main function reside.
+ - HVPowerSupply: Thanks to Orlando Soto.
+	Not yet used. It take the CAENWrapper and transform
+	it to a class. CAENWrapper is compiled in 32Bit
+	mode. If you want to use it the var ARQ in MAkefile
+	must be setted to 32.
+ - PolyScienceChiller: Thanks to Orlando Soto and Alam Toro
+	It use the instruction set of the Chiller and create
+	a class that manage it.
+ - ProgramParameters: Thanks to Alam Toro.
+	It is a variables container and manager
+ - scripts: Thanks to Alam Toro
+	It read the output files from main program and show
+	 histogram in different format
+ - TestAssembly: Thanks to Alejandro Gonzalez and Alam Toro
+	It communicate with controllr in order to manage
+	the electronics and drive the correct channel to
+	each channel.
+
+USE:
+After compiled a file named system will be created under bin
+folder. In order to know how to use it, please write:
+
+	system --help
+
+If you have problem compiling, please contact to:
+					alam.toro@usm.cl
