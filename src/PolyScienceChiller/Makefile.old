@@ -1,0 +1,27 @@
+GFLAGS=-Wall -O3 -fPIC
+CFLAGS=-Wall -O3 -fPIC -c
+INCLUDE=.
+
+Polyscience.so: ../lib/libPolyScienceChiller.so PolyScienceChiller.cpp PolyScienceChiller.h
+
+../lib/libPolyScienceChiller.so: PolyScienceChiller.o
+	mkdir -p ../lib
+	g++ -shared -Wl,-soname,libPolyScienceChiller.so -o libPolyScienceChiller.so.1.0.1 PolyScienceChiller.o
+	mv libPolyScienceChiller.so.1.0.1 ../lib/.
+	ln -fs ../lib/libPolyScienceChiller.so.1.0.1 ../lib/libPolyScienceChiller.so
+
+PolyScienceChiller.o: PolyScienceChiller.cpp PolyScienceChiller.h
+	g++ $(CFLAGS) PolyScienceChiller.cpp -o PolyScienceChiller.o $(addprefix -I, $(INCLUDE))
+
+test: test.o PolyScienceChiller.o PolyScienceChiller.cpp PolyScienceChiller.h
+	g++ $(GFLAGS) test.o PolyScienceChiller.o -o test
+
+test.o: test.cpp PolyScienceChiller.cpp
+	g++ $(CFLAGS) $(addprefix -I, $(INCLUDE)) test.cpp -o test.o
+
+clean:
+	rm -f *.o *~ *.so test
+
+cleanall: clean
+	rm -fr ../lib/libPolyScienceChiller.so.1.0.1 ../lib/libPolyScienceChiller.so
+

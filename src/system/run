@@ -1,0 +1,4 @@
+#/bin/bash
+
+./system $0 $1 $2 $3 $4 $5
+root -l myScript.C

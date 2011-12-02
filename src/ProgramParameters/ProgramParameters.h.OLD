@@ -1,0 +1,41 @@
+#ifndef __PROGRAM_PARAMETERS__
+#define __PROGRAM_PARAMETERS__
+
+//#include <iostream>
+//#include <fstream>
+//#include <sstream>
+#include <string.h>
+
+
+class ProgramParameters {
+private:
+	int debug;
+	unsigned long int mask;
+#ifdef RUNNINGINM32MODE
+	unsigned long int mask2;
+#endif
+	int samples;
+	char* bvpsMapFile;
+	std::string file_name_format;
+	char* controllerDevice;
+	char* chillerDevice;
+
+public:
+	ProgramParameters(int argc,char** argv);
+	~ProgramParameters();
+	void Presentation();
+	int checkImportantParameters();
+	void usage(char* argv);
+	void Help(char* argv);
+	bool Debug(int level);
+	bool Mask(int i);
+	int GetSamples();
+	std::string GetFName();
+	void SaveData(int *Data, int *Hits, int *GateCounter, int board, std::ofstream & file);
+	char* GetBVPSmapPath();
+	std::string GetControllerDevice();
+	std::string GetChillerDevice();
+};
+
+#endif
+

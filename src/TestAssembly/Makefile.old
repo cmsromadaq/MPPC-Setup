@@ -1,0 +1,45 @@
+GFLAGS=-c -Wall -O3 
+CFLAGS=-Wall -O3
+INCLUDE=.
+
+testAssembly.so: ../lib/libtestAssembly.so
+
+../lib/libtestAssembly.so: testAssembly.o
+	mkdir -p ../lib
+	g++ -shared -Wl,-soname,libTestAssembly.so -o libTestAssembly.so.1.0.1 testAssembly.o
+	mv libTestAssembly.so.1.0.1 ../lib/.
+	ln -fs ../lib/libTestAssembly.so.1.0.1 ../lib/libTestAssembly.so
+
+testAssembly.o: testAssembly.cpp TestAssembly.h
+	g++ -fPIC $(GFLAGS) $(addprefix -I, $(INCLUDE)) testAssembly.cpp -o testAssembly.o
+
+test: test.o testAssembly.o 
+	g++ $(CFLAGS) test.o testAssembly.o -o test
+
+test.o: test.cpp testAssembly.cpp
+	g++ $(GFLAGS) $(addprefix -I, $(INCLUDE)) test.cpp -o test.o
+
+setaddress: setaddress.o testAssembly.o
+	g++ $(CFLAGS) setaddress.o testAssembly.o -o ../bin/setaddress
+
+setaddress.o: setaddress.cpp testAssembly.cpp
+	g++ $(GFLAGS) $(addprefix -I, $(INCLUDE)) setaddress.cpp -o setaddress.o
+
+onvol: onvol.o testAssembly.o
+	g++ $(CFLAGS) onvol.o testAssembly.o -o ../bin/onvol
+
+onvol.o: onvol.cpp testAssembly.cpp
+	g++ $(GFLAGS) $(addprefix -I, $(INCLUDE)) onvol.cpp -o onvol.o
+
+offvol: offvol.o testAssembly.o
+	g++ $(CFLAGS) offvol.o testAssembly.o -o ../bin/offvol
+
+offvol.o: offvol.cpp testAssembly.cpp
+	g++ $(GFLAGS) $(addprefix -I, $(INCLUDE)) offvol.cpp -o offvol.o
+
+clean:
+	rm -f *.o *~ *.so test
+
+cleanall: clean
+	rm -fr ../lib/libTestAssembly.so.1.0.1 ../lib/libTestAssembly.so
+

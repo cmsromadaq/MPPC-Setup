@@ -1,0 +1,47 @@
+------------------------------------------------------
+                QDCDataAcquisitionv1.0
+------------------------------------------------------
+
+Developer: Pedro F. Toledo
+           <pedrotoledocorrea@gmail.com>
+
+This program is designed to use a setup based on 4 dev
+ices:
+- 1 Crate VME with 3 Free Slots
+- 1 CAEN VME-USM v1718
+- 2 CAEN QDC v792
+
+This program communicates through a USB link with  the
+v1718 that acquire information from the v792s in order
+to generate a TH2F with the histograms of charge measu
+red on N detected hits. Is assumed that the signals to
+measure as for the gate are correctly stablished for t
+he acquisition.
+
+The syntax is:
+QDCDataAcquisitionv1.0 <Mask Ch:63-32> <Mask Ch:31-0> 
+<Samples> <TH2F Filename>
+
+Example:
+QDCDataAcquisitionv1.0 FFFF0000 F0000000 1000 exa.root
+
+This will acquire 1000 samples from channels 28-31 and
+48-63, store them on a TH2F with x the channel  number
+and save them on exa.root file.
+
+VME Addresses:
+It is assumed that the QDC VME Address for the v792 th
+at manages the channels 31 to 0 is on 0x00110000 and t
+the one managing from 63 to 32 is on 0x00220000.  This
+addresses can be changed on lines 46 and 47 on the mai
+n file: QDCDataAcquisitionv1.0.cpp
+
+Error Exit Codes:
+ 0 - No Error
+ 1 - Error Opening the USB Link
+ 2 - Problem Writing
+ 3 - Problem Reading
+ 4 - Problem BLT Reading
+ 5 - Invalid Syntax or Input Parameter
+ 6 - Error on QDC Information Interpretation
+ 7 - Error Connecting to QDC 

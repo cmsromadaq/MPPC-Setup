@@ -1,0 +1,41 @@
+########################################################################
+#                                                                      
+#              --- CAEN SpA - Computing Division ---                   
+#                                                                      
+#   CAENVMElib Software Project                                        
+#                                                                      
+#   Created  :  March 2004      (Rel. 1.0)                                             
+#                                                                      
+#   Auth: S. Coluccini                                                 
+#                                                                      
+########################################################################
+EXE		= QDCDataAcquisitionv1.0
+
+CC		= gcc
+
+COPTS		= -fPIC -DLINUX -Wall `/opt/root/5.28.00/bin/root-config --cflags`
+
+FLAGS		= -Wall -s `/opt/root/5.28.00/bin/root-config --glibs`
+
+DEPLIBS		= -L/opt/caen/v1718/lib64/ -I/opt/root/5.28.00/lib/ -lCAENVME -lcurses -lpthread
+
+OBJS		= QDCDataAcquisitionv1.0.o CAENVMEenvironment.o
+
+INCLUDEDIR      = -I.
+
+INCLUDES 	= CAENVMElib.h CAENVMEtypes.h CAENVMEoslib.h CAENVMEenvironment.h 
+#########################################################################
+all	:	$(EXE)
+
+clean	:	
+		/bin/rm -f $(OBJS) $(EXE)
+
+$(EXE)	:	$(OBJS)
+		/bin/rm -f $(EXE)
+		$(CC) $(FLAGS) -o $(EXE) $(OBJS) $(DEPLIBS) -DLINUX
+
+$(OBJS)	:	$(INCLUDES) Makefile
+
+%.o	:	%.cpp
+		$(CC) $(COPTS) $(INCLUDEDIR) -c -o $@ $<
+

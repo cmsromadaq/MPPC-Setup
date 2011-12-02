@@ -1,0 +1,51 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+	echo -e "\e[0;31mERROR:\e[0m file name format must be specified"
+	exit
+fi
+
+if [ ! -d /data/test/Data/`date +%Y%m%d` ]; then
+	mkdir /data/test/Data/`date +%Y%m%d`
+	chmod 775 /data/test/Data/`date +%Y%m%d`
+	if [ $? -eq 0 ]; then
+		echo -e "Folder succefully created: /data/test/Data/`date +%Y%m%d`"
+	else
+		echo -e "\e[0;31mERROR:\e[0m folder canot be created: /data/test/Data/`date +%Y%m%d`"
+		exit
+	fi
+fi
+
+
+if [ ! -d /data/test/Temp/`date +%Y%m%d` ]; then
+	mkdir /data/test/Temp/`date +%Y%m%d`
+	chmod 775 /data/test/Temp/`date +%Y%m%d`
+	if [ $? -eq 0 ]; then
+		echo -e "Folder succefully created: /data/test/Temp/`date +%Y%m%d`"
+	else
+		echo -e "\e[0;31mERROR:\e[0m folder canot be created: /data/test/Temp/`date +%Y%m%d`"
+		exit
+	fi
+fi
+
+if [ ! -d /data/test/Imeasurement/`date +%Y%m%d` ]; then
+	mkdir /data/test/Imeasurement/`date +%Y%m%d`
+	chmod 775 /data/test/Imeasurement/`date +%Y%m%d`
+	if [ $? -eq 0 ]; then
+		echo -e "Folder succefully created: /data/test/Imeasurement/`date +%Y%m%d`"
+	else
+		echo -e "\e[0;31mERROR:\e[0m folder cannot be created: /data/test/Imeasurement/`date +%Y%m%d`"
+		exit
+	fi
+fi
+
+if test `cat /data/test/var/workingflag` -eq 0 ; then
+	echo "1" > /data/test/var/workingflag
+	/data/test/bin/getTemp /data/test/Temp/`date +%Y%m%d`/$1 5&
+	/data/test/bin/I_test -f /data/test/Imeasurement/`date +%Y%m%d`/$1_vi.dat -n 4000 -s 2& 
+	/data/test/bin/system --mask=FFFF000000000000 --samples=100000 --file-format=/data/test/Data/`date +%Y%m%d`/$1 
+	/data/test/bin/ufit Data/`date +%Y%m%d`/$1 try0 0
+	echo "0" > /data/test/var/workingflag
+else
+	echo -e "\e[0;31mERROR:\e[0m Program is running"
+fi

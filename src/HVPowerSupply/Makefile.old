@@ -1,0 +1,57 @@
+MAINDIR=/home/utfsm/alan/Documents/test/
+GLOBALDIR=$(MAINDIR)HVPowerSupply/
+LIBNAME=libHVPowerSupply.so
+PROGRAM=$(GLOBALDIR)$(LIBNAME)
+CC=g++
+FLAGS=-DUNIX -fPIC
+LFLAGS=-shared
+DIRLIB=/usr/lib
+LIBS=-L$(DIRLIB) -lcaenhvwrapper
+INCLUDEDIR=-I/home/utfsm/alan/Documents/test/HVPowerSupply/CAENHVWrapper_2_11/include -I.
+SOURCES=$(GLOBALDIR)HVPowerSupply.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+CFLAGS=$(FLAGS) -c
+
+########################################################################
+
+$(MAINDIR)lib/libHVPowerSupply.so: HVPowerSupply.o wraper.so HVPowerSupply.h HVPowerSupply.cpp
+	g++ -shared -m32 -Wl,-soname,libHVPowerSupply.so -o libHVPowerSupply.so.1.0.1 HVPowerSupply.o -L$(MAINDIR)lib -lhscaenet -lcaenhvwrapper
+	mv libHVPowerSupply.so.1.0.1 $(MAINDIR)lib/.
+	ln -fs $(MAINDIR)lib/libHVPowerSupply.so.1.0.1 $(MAINDIR)lib/libHVPowerSupply.so
+
+HVPowerSupply.o: HVPowerSupply.h HVPowerSupply.cpp $(MAINDIR)HVPowerSupply/CAENHVWrapper_2_11/include/CAENHVWrapper.h
+	g++ -DUNIX -fPIC -m32 -c HVPowerSupply.cpp -o HVPowerSupply.o -I$(MAINDIR)HVPowerSupply/CAENHVWrapper_2_11/include -I.
+
+wraper.so: $(MAINDIR)lib/libhscaenet.so $(MAINDIR)lib/libcaenhvwrapper.so
+
+$(MAINDIR)lib/libhscaenet.so: $(MAINDIR)HVPowerSupply/CAENHVWrapper_2_11/Lib/hscaenetlib.so.1.6
+	cp $(MAINDIR)HVPowerSupply/CAENHVWrapper_2_11/Lib/hscaenetlib.so.1.6 $(MAINDIR)lib/.
+	ln -fs $(MAINDIR)lib/hscaenetlib.so.1.6 $(MAINDIR)lib/libhscaenet.so
+
+$(MAINDIR)lib/libcaenhvwrapper.so: $(MAINDIR)HVPowerSupply/CAENHVWrapper_2_11/Lib/libcaenhvwrapper.so.2.11
+	cp $(MAINDIR)HVPowerSupply/CAENHVWrapper_2_11/Lib/libcaenhvwrapper.so.2.11 $(MAINDIR)/lib/.
+	ln -fs $(MAINDIR)lib/libcaenhvwrapper.so.2.11 $(MAINDIR)lib/libcaenhvwrapper.so
+
+test: test.o $(MAINDIR)lib/libHVPowerSupply.so $(MAINDIR)lib/libhscaenet.so $(MAINDIR)lib/libcaenhvwrapper.so 
+	g++ -g -DUNIX -fPIC -m32 -Wall test.o -L$(MAINDIR)lib -lhscaenet -lcaenhvwrapper -lHVPowerSupply -o test
+
+test.o: test.cpp HVPowerSupply.h $(MAINDIR)HVPowerSupply/CAENHVWrapper_2_11/include/CAENHVWrapper.h
+	g++ -c -g -DUNIX -m32 -fPIC -Wall test.cpp -o test.o -I$(MAINDIR)HVPowerSupply/CAENHVWrapper_2_11/include
+
+vi_test: vi_test.o $(MAINDIR)lib/libHVPowerSupply.so $(MAINDIR)lib/libhscaenet.so $(MAINDIR)lib/libcaenhvwrapper.so
+	g++ -g -DUNIX -m32 -fPIC -Wall vi_test.o -L$(MAINDIR)lib -lhscaenet -lcaenhvwrapper -lHVPowerSupply -o vi_test
+
+vi_test.o: VI_test.cpp HVPowerSupply.h $(MAINDIR)HVPowerSupply/CAENHVWrapper_2_11/include/CAENHVWrapper.h
+	g++ -c -g -m32 -DUNIX -fPIC -Wall VI_test.cpp -o vi_test.o -I$(MAINDIR)HVPowerSupply/CAENHVWrapper_2_11/include
+
+clean:
+	rm -fr *.o *~ *.so *.so.1.0.1 test vi_test
+
+cleanall: clean
+	rm -fr ../lib/libHVPowerSupply.so
+	rm -fr ../lib/libHVPowerSupply.so.1.0.1
+	rm -fr ../lib/libcaenhvwrapper.so.2.11
+	rm -fr ../lib/libcaenhvwrapper.so
+	rm -fr ../lib/hscaenetlib.so.1.6
+	rm -fr ../lib/libhscaenetlib.so
+

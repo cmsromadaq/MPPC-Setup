@@ -1,0 +1,17 @@
+
+CAENVMEenvironment.so: ../lib/libCAENVMEenvironment.so
+
+../lib/libCAENVMEenvironment.so: CAENVMEenvironment.o
+	mkdir -p ../lib
+	g++ -shared -Wl,-soname,libCAENVMEenvironment.so -o libCAENVMEenvironment.so.0.0.1 CAENVMEenvironment.o -L/opt/caen/v1718/lib64 -lCAENVME
+	mv libCAENVMEenvironment.so.0.0.1 ../lib/.
+	ln -fs ../lib/libCAENVMEenvironment.so.0.0.1 ../lib/libCAENVMEenvironment.so
+
+CAENVMEenvironment.o: CAENVMElib.h CAENVMEtypes.h CAENVMEoslib.h CAENVMEenvironment.h CAENVMEenvironment.cpp
+	g++ -fPIC -DLINUX -Wall -c CAENVMEenvironment.cpp -I. -o CAENVMEenvironment.o
+
+clean:
+	rm -fr *.o *~ *.so test
+
+cleanall: clean
+	rm -fr libCAENVMEenvironment.so.0.0.1 libCAENVMEenvironment.so ../lib/libCAENVMEenvironment.so ../lib/libCAENVMEenvironment.so.0.0.1

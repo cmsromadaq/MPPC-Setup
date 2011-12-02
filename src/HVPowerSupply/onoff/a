@@ -1,0 +1,1 @@
+g++ onoff.cpp -o VI_onoff -L/home/orsosa/bias_volt_lib/shared/library/ -L/usr/lib -lcaenhvwrapper -lHVPowerSupply -I/home/orsosa/CAENHVWrapper_2_11/include -I/home/orsosa/VI_test -I/home/orsosa/bias_volt_lib/shared/library/
