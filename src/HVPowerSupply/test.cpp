@@ -18,20 +18,20 @@ int main(int argc, char* argv[]){
 	//HVPowerSupply *bvps = new HVPowerSupply("192.168.1.103","SY1525","admin","admin");
 	//HVPowerSupply bvps("192.168.1.103","SY1525","admin","admin");
 
-	if(CAENHVInitSystem(sys,LINKTYPE_TCPIP,ip,"admin","admin")){
-		std::cout << "Not conectted" << CAENHVGetError(sys) << std::endl;
+	if(CAENHV_InitSystem(sys,LINKTYPE_TCPIP,ip,"admin","admin")){
+		std::cout << "Not conectted" << CAENHV_GetError(sys) << std::endl;
 		exit(1);
 	}
-	if(CAENHVSetChParam(sys,1,"Pw",8,channel,&on)){
-		std::cout << "Not on: " << CAENHVGetError(sys) << std::endl;
+	if(CAENHV_SetChParam(sys,1,"Pw",8,channel,&on)){
+		std::cout << "Not on: " << CAENHV_GetError(sys) << std::endl;
 		exit(1);
 	}
 	msleep(5000);
-	if(CAENHVSetChParam(sys,1,"Pw",8,channel,&off)){
-		std::cout << "Not off: " << CAENHVGetError(sys) << std::endl;
+	if(CAENHV_SetChParam(sys,1,"Pw",8,channel,&off)){
+		std::cout << "Not off: " << CAENHV_GetError(sys) << std::endl;
 	}
-	if(CAENHVDeinitSystem(sys)){
-		std::cout << "Not delete: " << CAENHVGetError(sys) << std::endl;
+	if(CAENHV_DeinitSystem(sys)){
+		std::cout << "Not delete: " << CAENHV_GetError(sys) << std::endl;
 		exit(1);
 	}
 	//short unsigned int channel = 4;

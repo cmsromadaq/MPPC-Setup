@@ -7,8 +7,9 @@
 class	HVPowerSupply
 {
 private:
+        int handle;
 	char *ip;
-	char *sys;
+	int sys;
 	char *usr;
 	char *pass;
 	bool newInitialized;
@@ -17,7 +18,7 @@ public:
 	
 	 
 	HVPowerSupply(	char *ip,
-					char *sys,
+					int sys,
 					char *usr,
 					char *pass);
 	int connect();

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include "HVPowerSupply.h"
+#include <CAENHVWrapper.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -43,6 +44,7 @@ std::ofstream ofile;
 
 int main(int argc, char* argv[])
 {
+  std::cout << "START I_test" << std::endl;
 	for (i=1;i<argc;i++){
 		if(argv[i][0]=='-'){
 			switch (argv[i][1]){
@@ -68,6 +70,7 @@ int main(int argc, char* argv[])
 	}
 	ofile.open(ofilename);
 	unsigned slots[nSlot];
+	std::cout << "OK" << std::endl;
 	for (j=0;j<nSlot;j++){
 		slots[j]=(unsigned)(slotList[j]-'0');
 		//printf("slots[%d]: %d, slotList[%d]: %c\n",j,slots[j],j,slotList[j]);
@@ -75,8 +78,9 @@ int main(int argc, char* argv[])
 	//printf("%s\n",slotList);
 	
 	unsigned int status[nSlot][Nch];	
-	
-    	HVPowerSupply *dev1 = new HVPowerSupply((char *)"192.168.1.103",(char *)"SY1525",(char *)"admin",(char *)"admin");
+
+	std::cout << "CONNECT" << std::endl;
+    	HVPowerSupply *dev1 = new HVPowerSupply((char *)"192.168.1.103",SY2527,(char *)"admin",(char *)"admin");
 	printf("Performing Current test\nCaen power Supply : %s\n",dev1->GetError());
 	printf("slots to be measured ");
 	for (j=0;j<nSlot;j++)
