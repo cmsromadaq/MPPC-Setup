@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include "HVPowerSupply.h"
+#include <CAENHVWrapper.h>
 #define	msleep(x) usleep((x)*1000)
 #define Nch 8
 
@@ -34,7 +35,7 @@ int main(int argc, char* argv[]){
 		ofile.open(argv[1]);
 	else
 		ofile.open("datos.dat");
-	HVPowerSupply *dev1 = new HVPowerSupply("192.168.1.103","SY1525","admin","admin");
+	HVPowerSupply *dev1 = new HVPowerSupply("192.168.1.103",SY2527,"admin","admin");
 	printf("Performing bias test\n");
 	for (i=0;i<Nch;i++) {
 		channel[i]=i+4;

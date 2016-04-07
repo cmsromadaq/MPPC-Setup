@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include "HVPowerSupply.h"
+#include <CAENHVWrapper.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -20,7 +21,7 @@ unsigned short channel = 0;
 float current, bias;
 int main(int argc, char* argv[])
 {
-    	HVPowerSupply *dev = new HVPowerSupply((char *)"192.168.1.103",(char *)"SY1525",(char *)"admin",(char *)"admin");
+    	HVPowerSupply *dev = new HVPowerSupply((char *)"192.168.1.103",SY2527,(char *)"admin",(char *)"admin");
 	for (int i=1;i<argc;i++){
 		if(argv[i][0]=='-'){
 			switch (argv[i][1]){
